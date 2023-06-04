@@ -29,6 +29,19 @@ async function removeNote(id) {
   }
 }
 
+async function EditNote(id, data) {
+  const notes = await getNotes();
+
+  const editNoteTitle = notes.map((note) => {
+    if (note.id === id) {
+      note.title = data.title;
+    }
+    return note;
+  });
+
+  await fs.writeFile("./db.json", JSON.stringify(editNoteTitle));
+}
+
 async function getNotes() {
   const notes = await fs.readFile(notesPath, { encoding: "utf-8" });
   return Array.isArray(JSON.parse(notes)) ? JSON.parse(notes) : [];
@@ -49,6 +62,7 @@ async function printNotes() {
 
 module.exports = {
   addNote,
-  printNotes,
+  getNotes,
   removeNote,
+  EditNote,
 };
